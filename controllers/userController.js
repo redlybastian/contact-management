@@ -83,7 +83,7 @@ const userLogin = asyncHandler(async (req, res) => {
 
 // @dec Current user ifo
 // @route GET /api/users/current
-// @access public
+// @access private
 const currentUserInformation = asyncHandler(async (req, res) => {
   res.json(req.user);
 });
