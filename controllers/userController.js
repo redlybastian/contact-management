@@ -55,6 +55,12 @@ const registerUser = asyncHandler(async (req, res) => {
 // @route POST /api/users/login
 // @access public
 const userLogin = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    res.status(400);
+    throw new Error("All fields are mandatory!");
+  }
+
   res.json({
     message: "login user",
   });
