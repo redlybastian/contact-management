@@ -60,10 +60,25 @@ const userLogin = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("All fields are mandatory!");
   }
-
-  res.json({
-    message: "login user",
-  });
+  const user = await User.findOne({ email });
+  // compare password with hashing password
+  if (user && (await bcrypt.compare(password, user.password))) {
+    const accessToken = jwt.sign(
+      {
+        user: {
+          username: user.username,
+          email: user.email,
+          id: user.id,
+        },
+      },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: "1m" }
+    );
+    res.status(200).json({ accessToken });
+  } else {
+    res.status(401);
+    throw new Error("email or password is not valid");
+  }
 });
 
 // @dec Current user ifo
